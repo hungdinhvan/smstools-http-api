@@ -39,7 +39,7 @@ def is_admin(user):
         return True
     return False
 
-def list_some_sms(kind):
+def list_some_sms_1(kind):
     if kind not in current_app.config['KINDS']:
         return not_found(None)
 

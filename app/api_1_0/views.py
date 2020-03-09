@@ -15,7 +15,7 @@ def monitoring_view():
 @api_1_0.route('/sms/<kind>/', methods=['GET'])
 @auth.login_required
 def list_some_sms(kind):
-    return list_some_sms(kind)
+    return list_some_sms_1(kind)
 
 @api_1_0.route('/sms/<kind>/<message_id>', methods=['GET'])
 @auth.login_required
@@ -38,10 +38,15 @@ def outgoing_view():
         request_object = {}
         mobiles = request.args.get('mobiles')
         text = request.args.get('text')
+        queue_query = request.args.get('queue')
         if mobiles:
             request_object['mobiles'] = mobiles.replace(' ', '+').split(',')
         if text:
             request_object['text'] = text
+        if queue_query:
+            queue = queue_query
+        else:
+            queue =  current_app.config.get('DEFAULTQUEUE')
 
     # Check input data
     if type(request_object) is not dict:
@@ -66,7 +71,7 @@ def outgoing_view():
     if type(request_object['text']) is not type(unicode_str):
         return bad_request('text is not unicode')
 
-    queue = request_object.get('queue', current_app.config.get('DEFAULTQUEUE'))
+    #queue = request_object.get('queue', current_app.config.get('DEFAULTQUEUE'))
     data = {
         'mobiles': request_object['mobiles'],
         'text': request_object['text'],
