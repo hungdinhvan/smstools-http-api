@@ -44,9 +44,9 @@ def outgoing_view():
         if text:
             request_object['text'] = text
         if queue_query:
-            queue = queue_query
+            request_object["queue"] = queue_query
         else:
-            queue =  current_app.config.get('DEFAULTQUEUE')
+            request_object["queue"] =  current_app.config.get('DEFAULTQUEUE')
 
     # Check input data
     if type(request_object) is not dict:
@@ -75,7 +75,7 @@ def outgoing_view():
     data = {
         'mobiles': request_object['mobiles'],
         'text': request_object['text'],
-        'queue' : queue
+        'queue' : request_object["queue"]
     }
 
     result = send_sms(data)
